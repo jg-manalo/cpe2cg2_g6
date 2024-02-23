@@ -1,59 +1,69 @@
-
 package cpe2c.cpe2cg2_g6;
 
-public class BisectionMethod{
+public class BisectionMethod implements RootFinder, OutputHelper {
 
-    private double c;
     private String expr;
-    private int depth;
+    private short depth;
+    private double a;
+    private double b;
+    private double c;
+    private double threshold;
 
     private double midpoint(double a, double b) {
         return (a + b) / 2;
     }
 
-    private double fA(double a){
-        return Parser.parse(this.expr, a);
+    private double fA(double a) {
+        return Parser.parse(this.expr, this.a);
     }
-    
-    private double fB(double b){
-        return Parser.parse(this.expr, b);
-    }
-    
-    private double fC(double c){
-        return Parser.parse(this.expr, c);
-    }
-    
 
-    public BisectionMethod(String expr) {
-        this.expr = expr;
-        this.depth = 1;
+    private double fB(double b) {
+        return Parser.parse(this.expr, this.b);
     }
-    
-    public double findRoot(double a, double b){
-        this.c = midpoint(a, b);
+
+    private double fC() {
+        return Parser.parse(this.expr, this.c);
+    }
+
+    public BisectionMethod(String function, double a, double b) {
+        this.expr = function;
+        this.threshold = 0.01;
+        this.depth = 1;
+        this.a = a;
+        this.b = b;
+    }
+
+    @Override
+    public double findRoot() {
 
         try {
-            boolean isBelowTolerance = Math.abs(a - b) < 0.00001;
-            boolean atBestCase = fC(this.c) == 0.0;
-            boolean atMaxIteration = this.depth == 999;
-            boolean isAssumptionWrong = !(fA(a) * fB(b) < 0);
-            System.out.printf("step: %d a: %f b: %f c: %f f(c) %f\n", depth, a, b, c, this.fC(c));
-            
-            if (isAssumptionWrong){
+            boolean isAssumptionWrong = !(fA(this.a) * fB(this.b) < 0);
+
+            if (isAssumptionWrong) {
                 throw new RuntimeException("Try a different guess: the assumptions cannot make it through");
             }
-            if (isBelowTolerance || atBestCase || atMaxIteration) {
-                return c;
-            } else if (fA(a) * fC(c) < 0) {
-                depth++;
-                return findRoot(a, this.c);
-            } else {
-                depth++;
-                return findRoot(b, this.c);
+            for (short i = 1; i < 1000; i++) {
+                this.c = midpoint(this.a, this.b);
+                boolean atBestCase = fC() == 0.0;
+                boolean isBelowTolerance = Math.abs(this.a - this.b) < this.threshold;
+                System.out.printf("i[%d] a: %f b: %f c: %f f(c) %f\n", i, this.a, this.b, this.c, this.fC());
+                if (atBestCase || isBelowTolerance) {
+                    break;
+                } else if (fC() < 0) {
+                    this.a = this.c;
+                } else {
+                    this.b = this.c;
+                }
             }
+            return this.c;
         } catch (RuntimeException e) {
             System.out.println("Error: " + e.getMessage());
             return Double.NaN;
         }
+    }
+
+    @Override
+    public String getOutput() {
+        return String.format("root: %.6f", this.findRoot());
     }
 }

@@ -1,60 +1,62 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cpe2c.cpe2cg2_g6;
 
-/**
- *
- * @author PC 2
- */
-public class NewtonRaphson {
+public class NewtonRaphson implements RootFinder, OutputHelper{
 
     private String expr;
     private String fDer;
     private String sDer;
-
-    public NewtonRaphson(String expr, String fDer) {
+    private double x;
+    
+    public NewtonRaphson(String expr, String fDer, String sDer, double initialGuess) {
         this.expr = expr;
         this.fDer = fDer;
         this.sDer = sDer;
+        this.x = initialGuess;
     }
 
-    private double fOfX(double x) {
-        return Parser.parse(this.expr, x);
+    private double fOfX() {
+        return Parser.parse(this.expr, this.x);
     }
 
-    private double fPrime(double x) {
-        return Parser.parse(this.fDer, x);
+    private double fPrime() {
+        return Parser.parse(this.fDer, this.x);
     }
 
-    private double fDoublePrime(double x) {
-        return Parser.parse(this.sDer, x);
+    private double fDoublePrime() {
+        return Parser.parse(this.sDer, this.x);
     }
 
-    public double findRoot(double x) {
+    @Override 
+    public double findRoot() {
 
         try {
-            boolean notConvergent = (fOfX(x) * fDoublePrime(x) > Math.pow(fPrime(x), 2));
+            boolean notConvergent = (fOfX() * fDoublePrime()) >= Math.pow(fPrime(), 2);
 
             if (notConvergent) {
                 throw new RuntimeException("the assumption is not convergent, choose another assumption...");
             }
-            double old = x;
-            for (int i = 1; i < 1000; i++) {
+            double old = this.x;
+            for (int i = 0; i < 1000; i++) {
 
-                double division = fOfX(x) / fPrime(x);
-                double newX = x - division;
-                System.out.printf("x: %.6f\n", x);
+                double division = fOfX() / fPrime();
+                double newX = this.x - division;
+                
+                //si output helper na ang gagalaw dito at magfefeed ng iterated values sa gui
+                System.out.printf("x[%d]: %.6f\n", i, this.x);
                 if (Math.abs(division) < 0.00001) {
                     break;
                 }
-                x = newX;
+                this.x = newX;
             }
-            return x;
+            return this.x;
         } catch (RuntimeException e) {
             System.out.println("Error: " + e);
             return Double.NaN;
         }
+    }
+    
+    @Override
+    public String getOutput(){
+        return String.format("root: %.6f", this.findRoot());
     }
 }
