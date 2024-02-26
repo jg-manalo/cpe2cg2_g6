@@ -10,7 +10,7 @@ public class Cpe2cg2_g6 {
 
         Scanner input = new Scanner(System.in);
         System.out.println("Group 6's Numerical Methods Calculator");
-        System.out.println("[Type and Enter]:\n[B]isection Methods\n[M]OSS\n[N]ewton Raphson");
+        System.out.println("[Type and Enter]:\n[B]isection Method\n[M]OSS\n[N]ewton Raphson");
         char mode = input.next().charAt(0);
 
         switch (mode) {
