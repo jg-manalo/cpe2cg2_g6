@@ -36,15 +36,15 @@ public class MOSS implements RootFinder, OutputHelper {
                 xValueHistory.add(this.x);
             }
             
-            System.out.printf("Threshold: %f\n", this.threshold);
-            System.out.printf("x[%d]: %.7f\n", 0, this.x);
+            System.out.printf("Threshold: %.5f\n", this.threshold);
+            System.out.printf("x[%d]: %.9f\n", 0, this.x);
             
             for (short k = 1; k < 1000; k++) { 
                 this.x = g(this.x);
                 if (error(this.x, xValueHistory.peek()) < this.threshold) {
                     break;
                 }
-                System.out.printf("x[%d]: %.10f Error %.9f\n", k, this.x, error(this.x, xValueHistory.peek()));
+                System.out.printf("x[%d]: %.9f Error %.9f\n", k, this.x, error(this.x, xValueHistory.peek()));
                 
                 xValueHistory.add(this.x);
                 
@@ -68,6 +68,6 @@ public class MOSS implements RootFinder, OutputHelper {
 
     @Override
     public String getOutput() {
-        return String.format("Approximate root: %.7f", this.findRoot());
+        return String.format("Approximate root: %.10f", this.findRoot());
     }
 }
