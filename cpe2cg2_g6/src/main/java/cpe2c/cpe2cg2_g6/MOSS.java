@@ -1,13 +1,11 @@
 package cpe2c.cpe2cg2_g6;
 
-import java.util.Scanner;
-
 public class MOSS implements RootFinder, OutputHelper {
 
     //keep as much as possible yung lahat ng private
     private String function;
-    private String fSimplfied;
-    private String fDer;
+    private final String fSimplfied;
+    private final String fDer;
     //yung nasa baba is yung xk
     private double x;
     private final double threshold;
@@ -28,12 +26,12 @@ public class MOSS implements RootFinder, OutputHelper {
                 throw new RuntimeException("Solution will not converge, find another guess...");
             } 
             
-            System.out.printf("x[%d]: %f\n", 0, this.x);
+            System.out.printf("x[%d]: %.7f\n", 0, this.x);
             for (short k = 1; k < 1000; k++) { 
                 double previous = this.x;
                 this.x = g();
                 
-                double error = Math.abs((previous - this.x) / previous);
+                double error = Math.abs((this.x-previous) / this.x);
                 System.out.printf("x[%d]: %.7f\n", k, this.x);
                 if (error < this.threshold) {
                     break;
@@ -52,11 +50,11 @@ public class MOSS implements RootFinder, OutputHelper {
         this.fSimplfied = fSimplified;
         this.fDer = fDer;
         this.x = xk;
-        this.threshold = 0.00001;
+        this.threshold = 0.00001f;
     }
 
     @Override
     public String getOutput() {
-        return String.format("root: %.7f", this.findRoot());
+        return String.format("Approximate root: %.7f", this.findRoot());
     }
 }

@@ -64,6 +64,6 @@ public class BisectionMethod implements RootFinder, OutputHelper {
 
     @Override
     public String getOutput() {
-        return String.format("root: %.6f", this.findRoot());
+        return String.format("Approximate root: %f", this.findRoot());
     }
 }

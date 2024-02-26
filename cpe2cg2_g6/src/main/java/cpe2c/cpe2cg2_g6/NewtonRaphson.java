@@ -2,9 +2,9 @@ package cpe2c.cpe2cg2_g6;
 
 public class NewtonRaphson implements RootFinder, OutputHelper{
 
-    private String expr;
-    private String fDer;
-    private String sDer;
+    private final String expr;
+    private final String fDer;
+    private final String sDer;
     private double x;
     
     public NewtonRaphson(String expr, String fDer, String sDer, double initialGuess) {
@@ -43,7 +43,7 @@ public class NewtonRaphson implements RootFinder, OutputHelper{
                 
                 //si output helper na ang gagalaw dito at magfefeed ng iterated values sa gui
                 System.out.printf("x[%d]: %.6f\n", i, this.x);
-                if (Math.abs(division) < 0.00001) {
+                if (Math.abs((this.x-newX)/this.x) < 0.00001) {
                     break;
                 }
                 this.x = newX;
@@ -57,6 +57,6 @@ public class NewtonRaphson implements RootFinder, OutputHelper{
     
     @Override
     public String getOutput(){
-        return String.format("root: %.6f", this.findRoot());
+        return String.format("Approximate root: %.6f", this.findRoot());
     }
 }
