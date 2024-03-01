@@ -1,19 +1,17 @@
 package cpe2c.cpe2cg2_g6;
 
-public class NewtonRaphson implements RootFinder, OutputHelper{
+import java.util.Stack;
+
+public class NewtonRaphson implements RootFinder, OutputHelper {
 
     private final String expr;
     private final String fDer;
     private final String sDer;
-    private double x;
     
-    public NewtonRaphson(String expr, String fDer, String sDer, double initialGuess) {
-        this.expr = expr;
-        this.fDer = fDer;
-        this.sDer = sDer;
-        this.x = initialGuess;
-    }
-
+    private double x;
+    private final double threshold;
+    private Stack<Double> xValueHistory;
+    
     private double fOfX() {
         return Parser.parse(this.expr, this.x);
     }
@@ -25,38 +23,63 @@ public class NewtonRaphson implements RootFinder, OutputHelper{
     private double fDoublePrime() {
         return Parser.parse(this.sDer, this.x);
     }
+    
+    private double error(double current, double previous) {
+        return Math.abs((current - previous) / current);
+    }
+    
+    public NewtonRaphson(String expr, String fDer, String sDer, double initialGuess) {
+        this.expr = expr;
+        this.fDer = fDer;
+        this.sDer = sDer;
+        this.x = initialGuess;
+        this.threshold = 0.00001;
+        this.xValueHistory = new Stack<>();
+    }
 
-    @Override 
+    @Override
     public double findRoot() {
 
         try {
-            boolean notConvergent = (fOfX() * fDoublePrime()) >= Math.pow(fPrime(), 2);
-
-            if (notConvergent) {
-                throw new RuntimeException("the assumption is not convergent, choose another assumption...");
+            boolean convergent = (fOfX() * fDoublePrime()) < Math.pow(fPrime(), 2);
+            boolean haveSyntaxError = Double.isNaN(fOfX()) || Double.isNaN(fPrime()) || Double.isNaN(fDoublePrime());
+            
+            if (haveSyntaxError) {
+                throw new RuntimeException("Syntax Error");
+            } else if (!convergent) {
+                throw new RuntimeException("the assumption is not convergent\nchoose another assumption...");
+            } 
+            
+            if (xValueHistory.isEmpty()) {
+                xValueHistory.add(this.x);
             }
-            double old = this.x;
-            for (int i = 0; i < 1000; i++) {
-
-                double division = fOfX() / fPrime();
-                double newX = this.x - division;
-                
-                //si output helper na ang gagalaw dito at magfefeed ng iterated values sa gui
-                System.out.printf("x[%d]: %.6f\n", i, this.x);
-                if (Math.abs((this.x-newX)/this.x) < 0.00001) {
+            
+            System.out.printf("x[%d]: %.10f\n", 0, this.x);
+            for (short i = 1; i < 1000; i++) {
+                this.x = this.x - (fOfX() / fPrime());
+                //temporary implementation for demo purpose only
+                System.out.printf("x[%d]: %.10f\n", i, this.x);
+                if (error(this.x, this.xValueHistory.peek()) < this.threshold) {
                     break;
                 }
-                this.x = newX;
+                this.xValueHistory.push(this.x);
+                //actual implementation
+                MessageHelper.send(String.format("x[%d]: %.10f\n", i, this.x));
             }
-            return this.x;
+            //which is which???
+            //return this.x;
+            return this.xValueHistory.peek();
         } catch (RuntimeException e) {
+            //temporary implementation
             System.out.println("Error: " + e);
-            return Double.NaN;
+            //actual implementation
+            MessageHelper.send(e.getMessage());
         }
+        return Double.NaN;
     }
-    
+
     @Override
-    public String getOutput(){
-        return String.format("Approximate root: %.6f", this.findRoot());
+    public String getOutput() {
+        return String.format("Approximate root: %.10f", this.findRoot());
     }
 }

@@ -42,18 +42,21 @@ public class Cpe2cg2_g6 {
 
             case 'N' -> {
                 System.out.println("[Type and Enter] Function:");
+
                 String nFunc = input.next();
                 System.out.println("[Type and Enter] First Derivative of the Function:");
+
                 String nFDer = input.next();
                 System.out.println("[Type and Enter] Second Derivative of the Function:");
+
                 String nSDer = input.next();
                 System.out.println("[Type and Enter] Approximate Value:");
+
                 double approximate = input.nextDouble();
 
                 NewtonRaphson nr = new NewtonRaphson(nFunc, nFDer, nSDer, approximate);
                 System.out.println(nr.getOutput());
             }
         }
-
     }
 }
