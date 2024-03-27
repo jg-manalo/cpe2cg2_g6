@@ -1,4 +1,4 @@
-package cpe2c.cpe2cg2_g6;
+package userIO;
 
 import java.util.LinkedList;
 import java.util.Queue;

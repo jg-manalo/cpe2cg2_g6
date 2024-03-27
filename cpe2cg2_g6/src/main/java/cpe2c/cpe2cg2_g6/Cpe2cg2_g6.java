@@ -1,5 +1,9 @@
 package cpe2c.cpe2cg2_g6;
 
+import rootFinding.NewtonRaphson;
+import rootFinding.MOSS;
+import rootFinding.BisectionMethod;
+import linearalgebra.Jacobi;
 import org.mariuszgromada.math.mxparser.License;
 import java.util.Scanner;
 
@@ -58,5 +62,7 @@ public class Cpe2cg2_g6 {
                 System.out.println(nr.getOutput());
             }
         }
+//          Jacobi jacobi = new Jacobi();
+//          jacobi.showResult();
     }
 }

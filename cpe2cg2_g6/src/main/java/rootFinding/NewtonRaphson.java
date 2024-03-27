@@ -1,5 +1,8 @@
-package cpe2c.cpe2cg2_g6;
+package rootFinding;
 
+import userIO.Parser;
+import userIO.OutputHelper;
+import userIO.MessageHelper;
 import java.util.Stack;
 
 public class NewtonRaphson implements RootFinder, OutputHelper {
@@ -10,7 +13,7 @@ public class NewtonRaphson implements RootFinder, OutputHelper {
     
     private double x;
     private final double threshold;
-    private Stack<Double> xValueHistory;
+    private final Stack<Double> xValueHistory;
     
     private double fOfX() {
         return Parser.parse(this.expr, this.x);
@@ -59,16 +62,14 @@ public class NewtonRaphson implements RootFinder, OutputHelper {
                 this.x = this.x - (fOfX() / fPrime());
                 //temporary implementation for demo purpose only
                 System.out.printf("x[%d]: %.10f\n", i, this.x);
-                if (error(this.x, this.xValueHistory.peek()) < this.threshold) {
+                if (error(this.x, this.xValueHistory.pop()) < this.threshold) {
                     break;
                 }
                 this.xValueHistory.push(this.x);
                 //actual implementation
                 MessageHelper.send(String.format("x[%d]: %.10f\n", i, this.x));
             }
-            //which is which???
-            //return this.x;
-            return this.xValueHistory.peek();
+            return this.x;
         } catch (RuntimeException e) {
             //temporary implementation
             System.out.println("Error: " + e);

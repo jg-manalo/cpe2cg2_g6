@@ -1,4 +1,9 @@
-package cpe2c.cpe2cg2_g6;
+package rootFinding;
+
+import rootFinding.RootFinder;
+import userIO.Parser;
+import userIO.OutputHelper;
+import userIO.MessageHelper;
 
 public class BisectionMethod implements RootFinder, OutputHelper {
 

@@ -1,4 +1,10 @@
-cpe2c\cpe2cg2_g6\NewtonRaphson.class
-cpe2c\cpe2cg2_g6\Parser.class
+rootFinding\MOSS.class
+userIO\Input.class
 cpe2c\cpe2cg2_g6\Cpe2cg2_g6.class
-cpe2c\cpe2cg2_g6\BisectionMethod.class
+rootFinding\BisectionMethod.class
+linearalgebra\Jacobi.class
+rootFinding\NewtonRaphson.class
+userIO\OutputHelper.class
+userIO\Parser.class
+rootFinding\RootFinder.class
+userIO\MessageHelper.class

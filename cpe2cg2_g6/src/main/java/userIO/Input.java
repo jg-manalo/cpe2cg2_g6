@@ -5,7 +5,7 @@ Considered true:
 3. No consecutive used of mathematical operators 
 4. If ^ for exponents, must be preceeded by a variable or digits then followed by a variable or digits (testing phase)
  */
-package cpe2c.cpe2cg2_g6;
+package userIO;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class Input {
 
     public static boolean wrongBasicFormat(String input) {
-        Pattern pattern = Pattern.compile("^\\+|-?[a-z]?[\\d]?");
+        Pattern pattern = Pattern.compile("^\\+|-?[\\d]?[a-z]?");
         Matcher matcher = pattern.matcher(input);
 
         return !matcher.find();
@@ -27,15 +27,15 @@ public class Input {
     }
 
     private static boolean successiveOperators(String input) {
-        Pattern pattern = Pattern.compile("(?:[+\\-*\\/E])(?![+\\-*\\/E])");
+        Pattern pattern = Pattern.compile("(.)\\1(?!\\1)");
         Matcher matcher = pattern.matcher(input);
 
-        return !matcher.find();
+        return matcher.find();
 
     }
 
     private static boolean illegalExponential(String input) {
-        Pattern pattern = Pattern.compile("[0-9]*[xe]{0,1}\\^[0-9a-z]");
+        Pattern pattern = Pattern.compile("[\\d\\w]\\^{0,1}[\\d\\w]");
         Matcher matcher = pattern.matcher(input);
 
         return !matcher.find();
@@ -43,6 +43,6 @@ public class Input {
     }
 
     public static boolean isInvalid(String input) {
-        return imbalanceParentheses(input) || successiveOperators(input) || wrongBasicFormat(input) || illegalExponential(input);
+        return illegalExponential(input) || successiveOperators(input) || imbalanceParentheses(input) || wrongBasicFormat(input);
     }
 }

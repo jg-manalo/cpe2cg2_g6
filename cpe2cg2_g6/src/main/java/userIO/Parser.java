@@ -1,5 +1,6 @@
-package cpe2c.cpe2cg2_g6;
+package userIO;
 
+import userIO.Input;
 import org.mariuszgromada.math.mxparser.*;
 
 public class Parser {

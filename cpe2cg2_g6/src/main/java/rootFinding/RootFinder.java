@@ -1,4 +1,4 @@
-package cpe2c.cpe2cg2_g6;
+package rootFinding;
 
 interface RootFinder {
     double findRoot();
